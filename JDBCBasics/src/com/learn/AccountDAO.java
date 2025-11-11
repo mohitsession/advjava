@@ -1,7 +1,9 @@
 package com.learn;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -24,6 +26,13 @@ public class AccountDAO {
 //					+ "('vikas', 'vikas@gmail.com', 'vikas123'),"
 //					+ "('ravi', 'ravi@gmail.com', 'ravi123')");
 //			System.out.println("No of rows inserted : " + insert);
+//			
+			// Insert programatically
+//			
+//			String insertStatementSQL = "INSERT INTO account (username, email, password) VALUES (?,?,?)";
+//			int insert = statement.executeUpdate(insertStatementSQL);
+//			System.out.println("No of rows inserted : " + insert);
+//			
 
 //			int update = statement.executeUpdate("UPDATE account SET email='rohit1@gmail' where id=1");
 //			System.out.println("No of rows Update : " + update);
@@ -31,7 +40,45 @@ public class AccountDAO {
 //			int delete = statement.executeUpdate("DELETE FROM account WHERE username='rohit'");
 //			System.out.println("No of rows Deleted : " + delete);
 
-			ResultSet resultSet = statement.executeQuery("select * from account");
+//			ResultSet resultSet = statement.executeQuery("select * from account");
+//
+//			while (resultSet.next()) {
+//				int id = resultSet.getInt(1);
+//				String userName = resultSet.getString(2);
+//				String email = resultSet.getString(3);
+//				String password = resultSet.getString(4);
+//				String status = resultSet.getString(5);
+//				System.out.println("id : " + id);
+//				System.out.println("email : " + email);
+//				System.out.println("password : " + password);
+//				System.out.println("status : " + status);
+//				System.out.println("Username : " + userName);
+//				System.out.println("-------------------------------");
+//			}
+
+			PreparedStatement preparedStatement = connection
+					.prepareStatement("select * from account where username=? and password=?");
+			preparedStatement.setString(1, "Ram");
+			preparedStatement.setString(2, "ram123");
+			ResultSet resultSet = preparedStatement.executeQuery();
+
+			while (resultSet.next()) {
+				int id = resultSet.getInt(1);
+				String userName = resultSet.getString(2);
+				String email = resultSet.getString(3);
+				String password = resultSet.getString(4);
+				String status = resultSet.getString(5);
+				System.out.println("id : " + id);
+				System.out.println("email : " + email);
+				System.out.println("password : " + password);
+				System.out.println("status : " + status);
+				System.out.println("Username : " + userName);
+				System.out.println("-------------------------------");
+			}
+			
+			preparedStatement.setString(1, "Sham");
+			preparedStatement.setString(2, "sham123");
+			resultSet = preparedStatement.executeQuery();
 
 			while (resultSet.next()) {
 				int id = resultSet.getInt(1);
@@ -47,6 +94,9 @@ public class AccountDAO {
 				System.out.println("-------------------------------");
 			}
 
+//			CallableStatement callableStatement = connection.prepareCall("");
+//			callableStatement.executeQuery();
+			
 			// 5. close statement & connection object
 			statement.close();
 			connection.close();
