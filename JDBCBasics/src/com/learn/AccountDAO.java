@@ -27,12 +27,6 @@ public class AccountDAO {
 //					+ "('ravi', 'ravi@gmail.com', 'ravi123')");
 //			System.out.println("No of rows inserted : " + insert);
 //			
-			// Insert programatically
-//			
-//			String insertStatementSQL = "INSERT INTO account (username, email, password) VALUES (?,?,?)";
-//			int insert = statement.executeUpdate(insertStatementSQL);
-//			System.out.println("No of rows inserted : " + insert);
-//			
 
 //			int update = statement.executeUpdate("UPDATE account SET email='rohit1@gmail' where id=1");
 //			System.out.println("No of rows Update : " + update);
@@ -75,7 +69,7 @@ public class AccountDAO {
 				System.out.println("Username : " + userName);
 				System.out.println("-------------------------------");
 			}
-			
+
 			preparedStatement.setString(1, "Sham");
 			preparedStatement.setString(2, "sham123");
 			resultSet = preparedStatement.executeQuery();
@@ -96,10 +90,24 @@ public class AccountDAO {
 
 //			CallableStatement callableStatement = connection.prepareCall("");
 //			callableStatement.executeQuery();
-			
+
+
 			// 5. close statement & connection object
 			statement.close();
 			connection.close();
+			
+			// try with resource
+			String insertStatementSQL = "INSERT INTO account (username, email, password) VALUES (?,?,?)";
+			try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/bank", "root", "admin");
+					PreparedStatement ps = con.prepareStatement(insertStatementSQL);) {
+				ps.setString(1, "John2");
+				ps.setString(2, "john2email.com");
+				ps.setString(3, "john123");
+				int executeUpdate = ps.executeUpdate();
+				System.out.println("No of rows inserted : " + executeUpdate);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
